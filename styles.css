@@ -1,0 +1,51 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  max-width: fit-content;
+  min-width: fit-content;
+  justify-content: space-around;
+  margin: 2rem;
+}
+
+.table,
+.hand {
+  border: 1px solid black;
+  max-width: fit-content;
+  min-width: fit-content;
+  gap: 1rem;
+  padding: 1rem;
+  display: flex;
+}
+
+.table {
+  border-bottom: none;
+  border-radius: 1rem 1rem 0 0;
+}
+.hand {
+  border-right: none;
+  border-radius: 0 0 0 1rem;
+}
+
+.player {
+  display: flex;
+  max-width: fit-content;
+  min-width: 100%;
+}
+
+.stats {
+  border: 1px solid black;
+  flex: auto;
+  border-radius: 0 0 1rem 0;
+  padding: 1rem;
+}

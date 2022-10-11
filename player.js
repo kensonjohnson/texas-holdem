@@ -10,4 +10,10 @@ export default class Player {
       this.hand[i].src = this.cards[i].imagePath;
     }
   }
+
+  reset() {
+    this.cards.forEach((card, index) => {
+      this.hand[index].src = card.cardBackImagePath;
+    });
+  }
 }

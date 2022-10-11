@@ -25,6 +25,19 @@ export default class Deck {
   get numberOfCards() {
     return this.cards.length;
   }
+
+  //precache all of the images for the deck. doesn't work in every browser
+  preloadImages() {
+    let precacheImages = [];
+    SUITS.forEach((suit) => {
+      FACE_VALUES.forEach((value) => {
+        const img = (new Image().src = `images/${value}${suit}.gif`);
+        precacheImages.push(img);
+      });
+    });
+    return precacheImages;
+  }
+
   //rather than use Array.sort(), which is predictable even when using Math.random(),
   //we will create our own random sorting algorithm
   shuffle() {
@@ -39,21 +52,21 @@ export default class Deck {
     }
   }
 
-  dealRiver() {
+  dealTable() {
     //burn a card
     this.cards.shift;
-    //send five cards to the river and remove them from the deck
-    let riverCards = this.cards.slice(0, 5);
+    //send five cards to the table and remove them from the deck
+    let tableCards = this.cards.slice(0, 5);
     this.cards.splice(0, 5);
-    return riverCards;
+    return tableCards;
   }
 
   dealPlayer() {
     //burn a card
     this.cards.shift;
     //deal two cards, face up
-    let playerCards = this.cards.slice(0, 5);
-    this.cards.splice(0, 5);
+    let playerCards = this.cards.slice(0, 2);
+    this.cards.splice(0, 2);
     return playerCards;
   }
 }
@@ -65,4 +78,3 @@ function freshDeck() {
     });
   });
 }
-// document.images[0].src = deck.cards[0].imagePath;

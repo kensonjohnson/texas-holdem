@@ -3,32 +3,23 @@ import Player from "./player.js";
 import Table from "./table.js";
 
 const NUMBER_OF_PLAYERS = 1;
+
+const wagerButton = document.querySelector("[data-wager-button]");
 const nextButton = document.querySelector("[data-next-button]");
+const instructionText = document.querySelector("[data-instructions-text]");
+const currentChipsDisplay = document.querySelector("[data-current-chips]");
+const currentBetDisplay = document.querySelector("[data-current-bet]");
 
 //create deck of 52 cards
 let deck = new Deck();
 //precache all of the images, doesn't work on all browsers
 const precacheImages = deck.preloadImages();
 let gameStep = 0;
+let currentChips = 150;
+let currentBet = 0;
 let table = new Table(deck.dealTable());
 let player = new Player(deck.dealPlayer());
 
-function startGame() {
-  deck = new Deck();
-  //shuffle the deck
-  deck.shuffle();
-  //deal the river
-  table = new Table(deck.dealTable());
-  table.displayCards();
-  //deal player hand
-  player = new Player(deck.dealPlayer());
-  player.displayCards();
-  //reveal the turn card
-  table.turnCard();
-  //reveal the river card
-  table.river();
-}
-// startGame();
 function next() {
   switch (gameStep) {
     case 0: //prepare new game and the player's hand
@@ -38,51 +29,57 @@ function next() {
       player = new Player(deck.dealPlayer());
       player.displayCards();
       gameStep++;
+      instructionText.innerHTML = "You can place a bet, or hit next!";
+      wagerButton.addEventListener("click", wager);
       break;
 
-    case 1: //player can place a bet
-      //to implement
-      gameStep++;
-      break;
-
-    case 2: //reveal the flop
+    case 1: //reveal the flop
       table.displayCards();
       gameStep++;
       break;
 
-    case 3: // player can place a bet
-      //to implement
-      gameStep++;
-      break;
-
-    case 4: //reveal the turn card
+    case 2: //reveal the turn card
       table.turnCard();
       gameStep++;
       break;
 
-    case 5: //player can place a bet
-      //to implement
-      gameStep++;
-      break;
-
-    case 6: //reveal the river card
+    case 3: //reveal the river card
+      wagerButton.removeEventListener("click", wager);
       table.river();
       gameStep++;
+      instructionText.innerHTML = "You Win/Lose!";
       //decide if winner and display results
       break;
 
-    case 7: //reset table for another round
+    case 4: //reset table for another round
       table.reset();
       player.reset();
       gameStep = 0;
+      currentBet = 0;
+      currentChips = 150;
+      updateStatsDisplay();
+      instructionText.innerHTML = 'Hit "Next" to Start!';
       break;
 
     default: //if something doesn't match up, just reset the game
       table.reset();
       player.reset();
       gameStep = 0;
+      instructionText.innerHTML = 'Hit "Next" to Start!';
+      wagerButton.removeEventListener("click", wager);
   }
 }
+
+function updateStatsDisplay() {
+  currentChipsDisplay.innerHTML = `$${currentChips}`;
+  currentBetDisplay.innerHTML = `$${currentBet}`;
+}
+
+const wager = () => {
+  currentChips = currentChips - 5;
+  currentBet = currentBet + 5;
+  updateStatsDisplay();
+};
 
 nextButton.addEventListener("click", () => {
   next();

@@ -32,15 +32,21 @@ body {
   border-bottom: none;
   border-radius: 1rem 1rem 0 0;
 }
-.hand {
-  border-right: none;
-  border-radius: 0 0 0 1rem;
-}
 
 .player {
   display: flex;
   max-width: fit-content;
   min-width: 100%;
+}
+
+.hand {
+  border-right: none;
+  border-radius: 0 0 0 1rem;
+}
+
+.hand > img {
+  height: fit-content;
+  width: fit-content;
 }
 
 .stats {

@@ -20,6 +20,7 @@ const FACE_VALUES = [
 export default class Deck {
   constructor(cards = freshDeck()) {
     this.cards = cards;
+    this.disardPile = [];
   }
 
   get numberOfCards() {
@@ -54,20 +55,30 @@ export default class Deck {
 
   dealTable() {
     //burn a card
-    this.cards.shift;
-    //send five cards to the table and remove them from the deck
-    let tableCards = this.cards.slice(0, 5);
-    this.cards.splice(0, 5);
+    this.disardPile.push(this.cards.shift());
+
+    //send three cards to the table and remove them from the deck
+    let tableCards = this.cards.slice(0, 3);
+    this.cards.splice(0, 3);
+
     return tableCards;
   }
 
   dealPlayer() {
     //burn a card
-    this.cards.shift;
+    this.disardPile.push(this.cards.shift());
+
     //deal two cards, face up
     let playerCards = this.cards.slice(0, 2);
     this.cards.splice(0, 2);
     return playerCards;
+  }
+
+  dealCard() {
+    //burn a card
+    this.disardPile.push(this.cards.shift());
+
+    return this.cards.shift();
   }
 }
 

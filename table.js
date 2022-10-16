@@ -1,9 +1,9 @@
 export default class Table {
   constructor(cards) {
     this.cards = cards;
-    this.cards[0].faceUp = true;
-    this.cards[1].faceUp = true;
-    this.cards[2].faceUp = true;
+    this.cards.forEach((card) => {
+      card.faceUp = true;
+    });
     this.table = document.querySelectorAll("[data-table-card]");
   }
 
@@ -15,6 +15,10 @@ export default class Table {
         this.table[i].src = this.cards[i].cardBackImagePath;
       }
     }
+  }
+
+  addCard(card) {
+    this.cards.push(card);
   }
 
   //the "turn card" is the fourth card revealed on the table
@@ -30,8 +34,8 @@ export default class Table {
   }
 
   reset() {
-    this.cards.forEach((card, index) => {
-      this.table[index].src = card.cardBackImagePath;
+    this.table.forEach((item, index) => {
+      item.src = this.cards[index].cardBackImagePath;
     });
   }
 }

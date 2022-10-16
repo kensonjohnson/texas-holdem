@@ -28,6 +28,8 @@ function next() {
       table = new Table(deck.dealTable());
       player = new Player(deck.dealPlayer());
       player.displayCards();
+      table.addCard(deck.dealCard());
+      table.addCard(deck.dealCard());
       gameStep++;
       instructionText.innerHTML = "You can place a bet, or hit next!";
       wagerButton.addEventListener("click", wager);
@@ -65,6 +67,8 @@ function next() {
       table.reset();
       player.reset();
       gameStep = 0;
+      currentBet = 0;
+      currentChips = 150;
       instructionText.innerHTML = 'Hit "Next" to Start!';
       wagerButton.removeEventListener("click", wager);
   }

@@ -4,6 +4,10 @@ export default class Player {
     this.hand = document.querySelectorAll("[data-player-card]");
   }
 
+  getCards() {
+    return this.cards;
+  }
+
   displayCards() {
     for (let i = 0; i < this.cards.length; i++) {
       this.cards[i].faceUp = true;

@@ -1,6 +1,7 @@
 import Deck from "./deck.js";
 import Player from "./player.js";
 import Table from "./table.js";
+import getPlayerHandRank from "./evaluate.js";
 
 const NUMBER_OF_PLAYERS = 1;
 
@@ -30,6 +31,8 @@ function next() {
       player.displayCards();
       table.addCard(deck.dealCard());
       table.addCard(deck.dealCard());
+      console.log(getPlayerHandRank(player.cards, table.cards));
+      // console.log(table.cards);
       gameStep++;
       instructionText.innerHTML = "You can place a bet, or hit next!";
       wagerButton.addEventListener("click", wager);

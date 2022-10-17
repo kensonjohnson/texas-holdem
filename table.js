@@ -7,6 +7,10 @@ export default class Table {
     this.table = document.querySelectorAll("[data-table-card]");
   }
 
+  getCards() {
+    return this.cards;
+  }
+
   displayCards() {
     for (let i = 0; i < this.cards.length; i++) {
       if (this.cards[i].faceUp) {

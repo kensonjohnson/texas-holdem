@@ -7,12 +7,12 @@ const HEARTS = "H";
 
 const testHand = [
   new Card("S", "5"),
-  new Card("C", "9"),
-  new Card("C", "T"),
-  new Card("D", "K"),
-  new Card("H", "K"),
-  new Card("D", "A"),
-  new Card("D", "A"),
+  new Card("S", "5"),
+  new Card("S", "9"),
+  new Card("S", "J"),
+  new Card("S", "Q"),
+  new Card("S", "K"),
+  new Card("S", "A"),
 ];
 
 class HandStats {
@@ -114,7 +114,7 @@ export default function checkPlayerHand(playerCards, tableCards) {
 
 //Many hands leave room for extra cards to be included in the mix. Such as having a Pair:
 // Both players could have the same pair, and so the tiebreaker is decided by whoever has the highest card.
-// This function determines how much a player's had is worth based on the value of thier highest cards.
+// This function determines how much a player's had is worth based on the value of the highest cards.
 function evaluateRankByHighestCards(
   arrayOfCards,
   excludedCard1 = -1,
@@ -580,14 +580,6 @@ function checkPair(stats, sortedCards) {
         -1,
         3
       );
-    console.log(
-      evaluateRankByHighestCards(
-        sortedCards,
-        stats.duplicates[0].cardValue,
-        -1,
-        3
-      )
-    );
     let temp = sortedCards.filter((card) => {
       if (card.numericValue === stats.duplicates[0].cardValue) {
         return true;

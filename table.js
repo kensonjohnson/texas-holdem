@@ -5,6 +5,7 @@ export default class Table {
       card.faceUp = true;
     });
     this.table = document.querySelectorAll("[data-table-card]");
+    this.tableValues = document.querySelectorAll("[data-table-card-value]");
   }
 
   getCards() {
@@ -14,9 +15,11 @@ export default class Table {
   displayCards() {
     for (let i = 0; i < this.cards.length; i++) {
       if (this.cards[i].faceUp) {
-        this.table[i].src = this.cards[i].imagePath;
+        this.tableValues[i].src = this.cards[i].imagePath;
+        this.table[i].classList.add("turned");
       } else {
-        this.table[i].src = this.cards[i].cardBackImagePath;
+        this.tableValues[i].src = this.cards[i].cardBackImagePath;
+        this.table[i].className = "card";
       }
     }
   }
@@ -38,8 +41,8 @@ export default class Table {
   }
 
   reset() {
-    this.table.forEach((item, index) => {
-      item.src = this.cards[index].cardBackImagePath;
+    this.table.forEach((item) => {
+      item.className = "card";
     });
   }
 }

@@ -2,6 +2,7 @@ export default class Player {
   constructor(cards) {
     this.cards = cards;
     this.hand = document.querySelectorAll("[data-player-card]");
+    this.handValues = document.querySelectorAll("[data-player-card-value]");
   }
 
   getCards() {
@@ -11,13 +12,14 @@ export default class Player {
   displayCards() {
     for (let i = 0; i < this.cards.length; i++) {
       this.cards[i].faceUp = true;
-      this.hand[i].src = this.cards[i].imagePath;
+      this.handValues[i].src = this.cards[i].imagePath;
+      this.hand[i].classList.add("turned");
     }
   }
 
   reset() {
-    this.cards.forEach((card, index) => {
-      this.hand[index].src = card.cardBackImagePath;
+    this.hand.forEach((item) => {
+      item.className = "card";
     });
   }
 }

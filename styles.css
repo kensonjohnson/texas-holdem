@@ -16,6 +16,43 @@ body {
   min-width: fit-content;
   justify-content: space-around;
   margin: 2rem;
+  perspective: 1000px;
+}
+
+img {
+  height: 15rem;
+}
+
+.card {
+  position: relative;
+  height: 15rem;
+  width: 10rem;
+}
+
+.card.turned .card-back {
+  transform: rotateY(-180deg);
+}
+
+.card.turned .card-front {
+  transform: rotateY(0);
+}
+
+.card-face {
+  position: absolute;
+  height: inherit;
+  transition: transform 500ms ease-in-out;
+  backface-visibility: hidden;
+  border-radius: 1rem;
+  box-shadow: 1px 1px 4px 2px black;
+  transform-style: preserve-3d;
+}
+
+.card-back {
+  transform: rotateY(0);
+}
+
+.card-front {
+  transform: rotateY(180deg);
 }
 
 .table,

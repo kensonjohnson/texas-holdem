@@ -32,7 +32,7 @@ export default class Deck {
     let precacheImages = [];
     SUITS.forEach((suit) => {
       FACE_VALUES.forEach((value) => {
-        const img = (new Image().src = `images/${value}${suit}.gif`);
+        const img = (new Image().src = `images/${value}${suit}.svg`);
         precacheImages.push(img);
       });
     });

@@ -19,8 +19,8 @@ export default class Card {
     this.suit = suit;
     this.faceValue = faceValue;
     this.numericValue = NUMERIC_VALUE_MAP[faceValue];
-    this.imagePath = `images/${faceValue}${suit}.gif`;
-    this.cardBackImagePath = "images/B.gif";
+    this.imagePath = `images/${faceValue}${suit}.svg`;
+    this.cardBackImagePath = "images/B.svg";
     this.faceUp = false;
   }
 }

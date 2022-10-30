@@ -5,144 +5,124 @@ const CLUBS = "C";
 const DIAMONDS = "D";
 const HEARTS = "H";
 
-const testHand = [
-  new Card("S", "5"),
-  new Card("S", "5"),
-  new Card("S", "9"),
-  new Card("S", "J"),
-  new Card("S", "Q"),
-  new Card("S", "K"),
-  new Card("S", "A"),
-];
-
-class HandStats {
+class HandData {
   constructor(
-    dupCount,
+    duplicateCount,
     seqCount,
     seqCountMax,
     maxCardValue,
     seqMaxValue,
     duplicates,
-    spades,
-    clubs,
-    diamonds,
-    hearts
+    sortedSpades,
+    sortedClubs,
+    sortedDiamonds,
+    sortedHearts,
+    sortedCards
   ) {
-    this.dupCount = dupCount;
+    this.duplicateCount = duplicateCount;
     this.seqCount = seqCount;
     this.seqCountMax = seqCountMax;
     this.maxCardValue = maxCardValue;
     this.seqMaxValue = seqMaxValue;
     this.duplicates = duplicates;
-    this.spades = spades;
-    this.clubs = clubs;
-    this.diamonds = diamonds;
-    this.hearts = hearts;
-    this.handName = "";
-    this.score = 0;
-    this.hand = [];
+    this.sortedSpades = sortedSpades;
+    this.sortedClubs = sortedClubs;
+    this.sortedDiamonds = sortedDiamonds;
+    this.sortedHearts = sortedHearts;
+    this.sortedCards = sortedCards;
   }
 }
 
 export default function checkPlayerHand(playerCards, tableCards) {
-  //create and initialize the needed variables
   let results = {};
 
-  //combine the cards into one array and sort them by the card values
-  let sorted = playerCards.concat(tableCards).sort((a, b) => {
-    return a.numericValue - b.numericValue;
-  });
+  const handData = analyzeHand(playerCards, tableCards);
 
-  //This is for testing specific hands
-  // sorted = testHand;
-
-  //prepare all of the data we need to determine the handName score
-  const handStats = analyzeHand(sorted);
-
-  // Check for a Royal Flush, Straight Flush, or Flush
-  results = checkRoyalFlush(handStats);
+  results = checkRoyalFlush(handData);
   if (results != null) {
     return results;
   }
 
-  results = checkStraightFlush(handStats);
+  results = checkStraightFlush(handData);
   if (results != null) {
     return results;
   }
 
-  results = checkFourOfAKind(handStats, sorted);
+  results = checkFourOfAKind(handData);
   if (results != null) {
     return results;
   }
 
-  results = checkFullHouse(handStats, sorted);
+  results = checkFullHouse(handData);
   if (results != null) {
     return results;
   }
 
-  results = checkFlush(handStats);
+  results = checkFlush(handData);
   if (results != null) {
     return results;
   }
 
-  results = checkStraight(handStats, sorted);
+  results = checkStraight(handData);
   if (results != null) {
     return results;
   }
 
-  results = checkThreeOfAKind(handStats, sorted);
+  results = checkThreeOfAKind(handData);
   if (results != null) {
     return results;
   }
 
-  results = checkTwoPair(handStats, sorted);
+  results = checkTwoPair(handData);
   if (results != null) {
     return results;
   }
 
-  results = checkPair(handStats, sorted);
+  results = checkPair(handData);
   if (results != null) {
     return results;
   }
 
   // No valid hands, so we play High Card
   let handName = "High Card";
-  let score = evaluateRankByHighestCards(sorted);
-  let hand = sorted.slice(-5);
+  let score = evaluateRankByHighestCards(handData.sortedCards);
+  let hand = handData.sortedCards.slice(-5);
   return { handName, score, hand };
 }
 
-//Many hands leave room for extra cards to be included in the mix. Such as having a Pair:
+// Many hands leave room for extra cards to be included in the mix. Such as having a Pair:
 // Both players could have the same pair, and so the tiebreaker is decided by whoever has the highest card.
 // This function determines how much a player's had is worth based on the value of the highest cards.
+
 function evaluateRankByHighestCards(
   arrayOfCards,
-  excludedCard1 = -1,
-  excludedCard2 = -1,
-  limitCheck = 5 // The most we will ever want is a 5 card hand
+  excludedCard1 = -1, // If this card value is found, it is skipped over in the loop.
+  excludedCard2 = -1, // If this card value is found, it is skipped over in the loop.
+  limitCheck = 5 // Determines the number of cards to include in the final sum.
 ) {
-  const normalize = 55000; // this brings the final sum back down to a number between 0 and 1
   let sum = 0;
+  let passes = 0;
   for (let i = arrayOfCards.length - 1; i >= 0; i--) {
     let cardValue = arrayOfCards[i].numericValue;
     if (cardValue == excludedCard1 || cardValue == excludedCard2) {
       continue;
     }
-    let normalizedValue = cardValue - 2;
-    sum += normalizedValue * Math.pow(13, arrayOfCards.length - i);
-    if (arrayOfCards.length - i >= limitCheck) {
+
+    sum += cardValue;
+    passes++;
+
+    if (passes >= limitCheck) {
       break;
     }
   }
 
-  return sum / normalize;
+  return sum;
 }
 
 // Before we get into determining if a handName is worth anything, we should identify cards that match by face value.
 // We also grab some other metrics within this function.
-function analyzeHand(sortedCards) {
-  //reset the variables
-  let dupCount = 1;
+function analyzeHand(playerCards, tableCards) {
+  let duplicateCount = 1;
   let seqCount = 1;
   let seqCountMax = 1;
   let maxCardValue = -1;
@@ -150,6 +130,21 @@ function analyzeHand(sortedCards) {
   let cardValue = -1;
   let nextCardValue = -1;
   let duplicates = [];
+  let sortedCards = playerCards.concat(tableCards).sort((a, b) => {
+    return a.numericValue - b.numericValue;
+  });
+
+  //for testing specific hands only
+  // const testHand = [
+  //   new Card("S", "2"),
+  //   new Card("C", "6"),
+  //   new Card("D", "6"),
+  //   new Card("H", "6"),
+  //   new Card("S", "7"),
+  //   new Card("C", "7"),
+  //   new Card("D", "7"),
+  // ];
+  // sortedCards = testHand;
 
   //grab the highest value represented
   maxCardValue = sortedCards[sortedCards.length - 1].numericValue;
@@ -159,10 +154,10 @@ function analyzeHand(sortedCards) {
 
     //check for duplicates
     if (cardValue == nextCardValue) {
-      dupCount++;
-    } else if (dupCount > 1) {
-      duplicates.push({ dupCount, cardValue });
-      dupCount = 1;
+      duplicateCount++;
+    } else if (duplicateCount > 1) {
+      duplicates.push({ duplicateCount, cardValue });
+      duplicateCount = 1;
     }
 
     if (cardValue + 1 == nextCardValue) {
@@ -181,69 +176,72 @@ function analyzeHand(sortedCards) {
   }
 
   // If we find any matching cards, we want to save how many and what the card value is.
-  if (dupCount > 1) {
+  if (duplicateCount > 1) {
     cardValue = nextCardValue;
-    duplicates.push({ dupCount, cardValue });
+    duplicates.push({ duplicateCount, cardValue });
   }
 
   // Finally, to make the matches easier to work with, we will move the highest number of matches to the front of the array
   duplicates.sort((a, b) => {
-    if (b.dupCount === a.dupCount) {
+    if (b.duplicateCount === a.duplicateCount) {
       return b.cardValue - a.cardValue;
     }
-    return b.dupCount - a.dupCount;
+    return b.duplicateCount - a.duplicateCount;
   });
 
-  let spades = sortedCards.filter((card) => {
+  //maybe rename to sortedSpades, etc
+  let sortedSpades = sortedCards.filter((card) => {
     if (card.suit === SPADES) return true;
   });
 
-  let clubs = sortedCards.filter((card) => {
+  let sortedClubs = sortedCards.filter((card) => {
     if (card.suit === CLUBS) return true;
   });
 
-  let diamonds = sortedCards.filter((card) => {
+  let sortedDiamonds = sortedCards.filter((card) => {
     if (card.suit === DIAMONDS) return true;
   });
 
-  let hearts = sortedCards.filter((card) => {
+  let sortedHearts = sortedCards.filter((card) => {
     if (card.suit === HEARTS) return true;
   });
 
-  return new HandStats(
-    dupCount,
+  return new HandData(
+    duplicateCount,
     seqCount,
     seqCountMax,
     maxCardValue,
     seqMaxValue,
     duplicates,
-    spades,
-    clubs,
-    diamonds,
-    hearts
+    sortedSpades,
+    sortedClubs,
+    sortedDiamonds,
+    sortedHearts,
+    sortedCards
   );
 }
 
 function checkRoyalFlush(stats) {
-  if (royalFlushHelper(stats.spades)) {
-    return { handName: "Royal Flush", score: 900, hand: spades.slice(-5) };
-  }
+  const suits = [
+    stats.sortedSpades,
+    stats.sortedClubs,
+    stats.sortedDiamonds,
+    stats.sortedHearts,
+  ];
 
-  if (royalFlushHelper(stats.clubs)) {
-    return { handName: "Royal Flush", score: 900, hand: clubs.slice(-5) };
+  for (const suit of suits) {
+    if (royalFlushHelper(suit)) {
+      return {
+        handName: "Royal Flush",
+        score: 900,
+        hand: suit.slice(-5),
+      };
+    }
   }
-
-  if (royalFlushHelper(stats.diamonds)) {
-    return { handName: "Royal Flush", score: 900, hand: diamonds.slice(-5) };
-  }
-
-  if (royalFlushHelper(stats.hearts)) {
-    return { handName: "Royal Flush", score: 900, hand: hearts.slice(-5) };
-  }
-
   return null;
 }
 
+//make this similar to the straight flush helper
 function royalFlushHelper(suitedCards) {
   if (suitedCards.length < 5) return false;
   if (
@@ -258,47 +256,23 @@ function royalFlushHelper(suitedCards) {
 }
 
 function checkStraightFlush(stats) {
-  let results = null;
-  let handName = "";
-  let score = 0;
-  let hand = [];
+  const suits = [
+    stats.sortedSpades,
+    stats.sortedClubs,
+    stats.sortedDiamonds,
+    stats.sortedHearts,
+  ];
 
-  results = straightFlushHelper(stats.spades);
-  if (results != null) {
-    handName = "Straight Flush";
-    score = 800 + (results.highestValue / 14) * 99;
-    hand = results.hand;
-
-    return { handName, score, hand };
+  for (const suit of suits) {
+    let results = straightFlushHelper(suit);
+    if (results != null) {
+      return {
+        handName: "Straight Flush",
+        score: 800 + (results.highestValue / 14) * 99,
+        hand: results.hand,
+      };
+    }
   }
-
-  results = straightFlushHelper(stats.clubs);
-  if (results != null) {
-    handName = "Straight Flush";
-    score = 800 + (results.highestValue / 14) * 99;
-    hand = results.hand;
-
-    return { handName, score, hand };
-  }
-
-  results = straightFlushHelper(stats.diamonds);
-  if (results != null) {
-    handName = "Straight Flush";
-    score = 800 + (results.highestValue / 14) * 99;
-    hand = results.hand;
-
-    return { handName, score, hand };
-  }
-
-  results = straightFlushHelper(stats.hearts);
-  if (results != null) {
-    handName = "Straight Flush";
-    score = 800 + (results.highestValue / 14) * 99;
-    hand = results.hand;
-
-    return { handName, score, hand };
-  }
-
   return null;
 }
 
@@ -307,6 +281,10 @@ function straightFlushHelper(suitedCards) {
   let counterMax = 1;
   let highestValue = -1;
   let hand = [];
+
+  if (suitedCards < 5) {
+    return null;
+  }
 
   for (let i = 0; i < suitedCards.length - 1; i++) {
     if (suitedCards[i].numericValue + 1 === suitedCards[i + 1].numericValue) {
@@ -343,25 +321,26 @@ function straightFlushHelper(suitedCards) {
   return null;
 }
 
-function checkFourOfAKind(stats, sortedCards) {
-  if (stats.duplicates.length > 0 && stats.duplicates[0].dupCount === 4) {
+function checkFourOfAKind(stats) {
+  if (stats.duplicates.length > 0 && stats.duplicates[0].duplicateCount === 4) {
     let handName = "Four of a Kind";
     let score =
       700 +
-      (stats.duplicates[0].cardValue / 14) * 99 +
+      stats.duplicates[0].cardValue * 7 * 0.95 + // weighted at 95%
       evaluateRankByHighestCards(
-        sortedCards,
+        stats.sortedCards,
         stats.duplicates[0].cardValue, // leave out the cards included in the Four of a Kind
         -1,
         1 // We only want the single highest card other than the Four of a Kind to be included.
-      );
+      ) *
+        0.05; // weighted at 5%
 
-    let highCard = sortedCards
+    let highCard = stats.sortedCards
       .filter((card) => {
         if (card.numericValue != stats.duplicates[0].cardValue) return true;
       })
       .slice(-1);
-    let hand = sortedCards
+    let hand = stats.sortedCards
       .filter((card) => {
         if (card.numericValue === stats.duplicates[0].cardValue) return true;
       })
@@ -371,104 +350,62 @@ function checkFourOfAKind(stats, sortedCards) {
   return null;
 }
 
-function checkFullHouse(stats, sortedCards) {
-  const duplicates = stats.duplicates;
-  let handName = "";
-  let score = 0;
-  let hand = [];
-
-  //Second Edge Case: Two sets of Three of a Kind. Take the best three of a kind, the other becomes a pair.
+function checkFullHouse(stats) {
   if (
-    duplicates.length > 1 &&
-    duplicates[0].dupCount === 3 &&
-    duplicates[1].dupCount === 3
+    stats.duplicates.length > 1 &&
+    stats.duplicates[0].duplicateCount === 3 &&
+    stats.duplicates[1].duplicateCount >= 2
   ) {
-    handName = "Full House";
+    let handName = "Full House";
 
     let score =
-      600 + duplicates[0].cardValue * 7 + duplicates[1].cardValue / 14;
+      600 +
+      stats.duplicates[0].cardValue * 7 * 0.95 + // weighted at 95%
+      stats.duplicates[1].cardValue * 7 * 0.05; // weighted at 5%
 
-    let tempTriple = sortedCards.filter((card) => {
-      if (card.numericValue === duplicates[0].cardValue) {
+    let tempTriple = stats.sortedCards.filter((card) => {
+      if (card.numericValue === stats.duplicates[0].cardValue) {
         return true;
       }
     });
 
-    let tempPair = sortedCards.filter((card) => {
-      if (card.numericValue === duplicates[1].cardValue) {
+    let tempPair = stats.sortedCards.filter((card) => {
+      if (card.numericValue === stats.duplicates[1].cardValue) {
         return true;
       }
     });
 
-    hand = tempTriple.concat(tempPair.slice(-2));
+    let hand = tempTriple.concat(tempPair.slice(-2));
 
-    return { handName, score, hand };
-  }
-
-  //Finally, check for a normal Full House situation
-  if (
-    duplicates.length > 1 &&
-    duplicates[0].dupCount === 3 &&
-    duplicates[1].dupCount === 2
-  ) {
-    handName = "Full House";
-    score = 600 + duplicates[0].cardValue * 7 + duplicates[1].cardValue / 14;
-    let tempThree = sortedCards.filter((card) => {
-      if (card.numericValue === duplicates[0].cardValue) {
-        return true;
-      }
-    });
-    let tempTwo = sortedCards.filter((card) => {
-      if (card.numericValue === duplicates[1].cardValue) {
-        return true;
-      }
-    });
-
-    hand = tempThree.concat(tempTwo);
     return { handName, score, hand };
   }
   return null;
 }
 
 function checkFlush(stats) {
-  let handName = "";
-  let score = 0;
-  let hand = [];
-  if (stats.spades.length > 4) {
-    handName = "Flush";
-    score = 500 + evaluateRankByHighestCards(stats.spades.slice(-5));
-    hand = stats.spades.slice(-5);
-    return { handName, score, hand };
-  }
+  const suits = [
+    stats.sortedSpades,
+    stats.sortedClubs,
+    stats.sortedDiamonds,
+    stats.sortedHearts,
+  ];
 
-  if (stats.clubs.length > 4) {
-    handName = "Flush";
-    score = 500 + evaluateRankByHighestCards(stats.clubs.slice(-5));
-    hand = stats.clubs.slice(-5);
-    return { handName, score, hand };
-  }
-
-  if (stats.diamonds.length > 4) {
-    handName = "Flush";
-    score = 500 + evaluateRankByHighestCards(stats.diamonds.slice(-5));
-    hand = stats.diamonds.slice(-5);
-    return { handName, score, hand };
-  }
-
-  if (stats.hearts.length > 4) {
-    handName = "Flush";
-    score = 500 + evaluateRankByHighestCards(stats.hearts.slice(-5));
-    hand = stats.hearts.slice(-5);
-    return { handName, score, hand };
+  for (const suit of suits) {
+    if (suit.length > 4) {
+      let handName = "Flush";
+      let score = 500 + evaluateRankByHighestCards(suit);
+      let hand = stats.sortedSpades.slice(-5);
+      return { handName, score, hand };
+    }
   }
   return null;
 }
 
-function checkStraight(stats, sortedCards) {
+function checkStraight(stats) {
   if (stats.seqCountMax >= 5) {
     let handName = "Straight";
     let score = 400 + (stats.seqMaxValue / 14) * 99;
-    let hand = sortedCards.filter((card) => {
+    let hand = stats.sortedCards.filter((card) => {
       if (card.numericValue === stats.seqMaxValue) return true;
       if (card.numericValue === stats.seqMaxValue - 1) return true;
       if (card.numericValue === stats.seqMaxValue - 2) return true;
@@ -485,7 +422,7 @@ function checkStraight(stats, sortedCards) {
   ) {
     let handName = "Straight";
     let score = 400 + (5 / 14) * 99;
-    let hand = sortedCards.filter((card) => {
+    let hand = stats.sortedCards.filter((card) => {
       if (card.numericValue === 14) return true;
       if (card.numericValue === stats.seqMaxValue) return true;
       if (card.numericValue === stats.seqMaxValue - 1) return true;
@@ -497,25 +434,29 @@ function checkStraight(stats, sortedCards) {
   return null;
 }
 
-function checkThreeOfAKind(stats, sortedCards) {
-  if (stats.duplicates.length === 1 && stats.duplicates[0].dupCount === 3) {
+function checkThreeOfAKind(stats) {
+  if (
+    stats.duplicates.length === 1 &&
+    stats.duplicates[0].duplicateCount === 3
+  ) {
     let handName = "Three of a Kind";
     let score =
       300 +
-      stats.duplicates[0].cardValue * 5 +
+      stats.duplicates[0].cardValue * 7 * 0.95 + // weighted at 95%
       evaluateRankByHighestCards(
-        sortedCards,
-        stats.duplicates[0].cardValue,
+        stats.sortedCards,
+        stats.duplicates[0].cardValue, // exclude the Three's value
         -1,
         2 // We only want to two highest cards other than the triple
-      );
+      ) *
+        0.05; // weighted at 5%
 
-    let tempTriple = sortedCards.filter((card) => {
+    let tempTriple = stats.sortedCards.filter((card) => {
       if (card.numericValue === stats.duplicates[0].cardValue) {
         return true;
       }
     });
-    let tempTwo = sortedCards.filter((card) => {
+    let tempTwo = stats.sortedCards.filter((card) => {
       if (card.numericValue != stats.duplicates[0].cardValue) {
         return true;
       }
@@ -528,21 +469,22 @@ function checkThreeOfAKind(stats, sortedCards) {
   return null;
 }
 
-function checkTwoPair(stats, sortedCards) {
+function checkTwoPair(stats) {
   if (stats.duplicates.length > 1) {
     let handName = "Two Pair";
     let score =
       200 +
-      stats.duplicates[0].cardValue * 2 +
-      stats.duplicates[1].cardValue +
+      stats.duplicates[0].cardValue * 7 * 0.85 + // weighted at 85%
+      stats.duplicates[1].cardValue * 7 * 0.1 + // weighted at 10%
       evaluateRankByHighestCards(
-        sortedCards,
+        stats.sortedCards,
         stats.duplicates[0].cardValue, // exclude first pair
         stats.duplicates[1].cardValue, // exclude second pair
         1 // only get the next highest card
-      );
+      ) *
+        0.05; // weighted at 5%
 
-    let tempPairs = sortedCards.filter((card) => {
+    let tempPairs = stats.sortedCards.filter((card) => {
       if (
         card.numericValue === stats.duplicates[0].cardValue ||
         card.numericValue === stats.duplicates[1].cardValue
@@ -552,7 +494,7 @@ function checkTwoPair(stats, sortedCards) {
     });
 
     let hand = tempPairs.concat(
-      sortedCards
+      stats.sortedCards
         .filter((card) => {
           if (
             card.numericValue != stats.duplicates[0].cardValue &&
@@ -568,29 +510,34 @@ function checkTwoPair(stats, sortedCards) {
   }
 }
 
-function checkPair(stats, sortedCards) {
+function checkPair(stats) {
   if (stats.duplicates.length > 0) {
     let handName = "Pair";
     let score =
       100 +
-      stats.duplicates[0].cardValue * 5 +
+      stats.duplicates[0].cardValue * 7 * 0.95 + // weighted at 95%
       evaluateRankByHighestCards(
-        sortedCards,
+        stats.sortedCards,
         stats.duplicates[0].cardValue,
         -1,
         3
-      );
-    let temp = sortedCards.filter((card) => {
+      ) *
+        0.05; // weighted at 5%
+
+    let temp = stats.sortedCards.filter((card) => {
       if (card.numericValue === stats.duplicates[0].cardValue) {
         return true;
       }
     });
-    let temp2 = sortedCards.filter((card) => {
+
+    let temp2 = stats.sortedCards.filter((card) => {
       if (card.numericValue != stats.duplicates[0].cardValue) {
         return true;
       }
     });
+
     let hand = temp.concat(temp2.slice(-3));
+
     return { handName, score, hand };
   }
 }

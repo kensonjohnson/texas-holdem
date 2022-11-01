@@ -189,7 +189,6 @@ function analyzeHand(playerCards, tableCards) {
     return b.duplicateCount - a.duplicateCount;
   });
 
-  //maybe rename to sortedSpades, etc
   let sortedSpades = sortedCards.filter((card) => {
     if (card.suit === SPADES) return true;
   });

@@ -37,6 +37,7 @@ function next() {
       gameStep++;
       instructionText.innerHTML = "You can place a bet, or hit next!";
       wagerButton.addEventListener("click", wager);
+      wagerButton.disabled = false;
       break;
 
     case 1: //reveal the flop
@@ -51,6 +52,7 @@ function next() {
 
     case 3: //reveal the river card
       wagerButton.removeEventListener("click", wager);
+      wagerButton.disabled = true;
       table.river();
       gameStep++;
       let results = checkPlayerHand(player.cards, table.cards);
@@ -78,6 +80,7 @@ function next() {
       instructionText.innerHTML =
         'Hit "Next" to begin playing. Each game costs $5 in chips to start!';
       wagerButton.removeEventListener("click", wager);
+      wagerButton.disabled = true;
   }
 }
 

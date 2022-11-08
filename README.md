@@ -1,3 +1,3 @@
 # texas-holdem
 
-A Hold 'Em style poker game writtin in vanilla JavaScript
+A Hold 'Em style poker game made with vanilla JavaScript

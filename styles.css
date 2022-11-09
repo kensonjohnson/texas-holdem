@@ -142,3 +142,9 @@ img {
 .button:disabled {
   opacity: 0.5;
 }
+
+.winning-card {
+  transition: scale 300ms ease-in-out;
+  box-shadow: 1px 1px 4px 2px gold;
+  scale: 1.07;
+}

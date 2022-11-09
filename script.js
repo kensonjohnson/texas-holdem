@@ -58,6 +58,7 @@ function next() {
       let results = checkPlayerHand(player.cards, table.cards);
       let winnings = determineWinnings(results.score, currentWager);
       let message = determineIfWinner(results, winnings);
+      displayWinningCards(results.hand);
       instructionText.innerHTML = message;
       currentChips = currentChips + winnings;
       break;
@@ -116,6 +117,32 @@ function determineWinnings(score, wager) {
   if (score >= 200) return wager * 2; // Two Pair
 
   if (score >= 100) return wager; // Pair
+}
+
+function displayWinningCards(hand) {
+  table.cards.forEach((tableCard) => {
+    for (let card of hand) {
+      if (
+        card.faceValue === tableCard.faceValue &&
+        card.suit === tableCard.suit
+      ) {
+        tableCard.winningCard = true;
+      }
+    }
+  });
+  player.cards.forEach((playerCard) => {
+    for (let card of hand) {
+      if (
+        card.faceValue === playerCard.faceValue &&
+        card.suit === playerCard.suit
+      ) {
+        playerCard.winningCard = true;
+      }
+    }
+  });
+
+  table.displayCards();
+  player.displayCards();
 }
 
 const wager = () => {

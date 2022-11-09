@@ -22,5 +22,6 @@ export default class Card {
     this.imagePath = `images/${faceValue}${suit}.svg`;
     this.cardBackImagePath = "images/B.svg";
     this.faceUp = false;
+    this.winningCard = false;
   }
 }

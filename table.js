@@ -6,6 +6,7 @@ export default class Table {
     });
     this.table = document.querySelectorAll("[data-table-card]");
     this.tableValues = document.querySelectorAll("[data-table-card-value]");
+    this.tableCards = document.querySelectorAll("[data-table-card-front]");
   }
 
   getCards() {
@@ -20,6 +21,10 @@ export default class Table {
       } else {
         this.tableValues[i].src = this.cards[i].cardBackImagePath;
         this.table[i].className = "card";
+      }
+
+      if (this.cards[i].winningCard) {
+        this.tableCards[i].classList.add("winning-card");
       }
     }
   }
@@ -41,8 +46,12 @@ export default class Table {
   }
 
   reset() {
-    this.table.forEach((item) => {
-      item.className = "card";
+    this.table.forEach((card) => {
+      card.className = "card";
+    });
+
+    this.tableCards.forEach((card) => {
+      card.className = "card-front card-face";
     });
   }
 }

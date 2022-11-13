@@ -121,7 +121,7 @@ function evaluateRankByHighestCards(
 
 // Before we get into determining if a handName is worth anything, we should identify cards that match by face value.
 // We also grab some other metrics within this function.
-function analyzeHand(playerCards, tableCards) {
+export function analyzeHand(playerCards, tableCards) {
   let duplicateCount = 1;
   let seqCount = 1;
   let seqCountMax = 1;
@@ -135,16 +135,16 @@ function analyzeHand(playerCards, tableCards) {
   });
 
   //for testing specific hands only
-  // const testHand = [
-  //   new Card("S", "2"),
-  //   new Card("C", "6"),
-  //   new Card("D", "6"),
-  //   new Card("H", "6"),
-  //   new Card("S", "7"),
-  //   new Card("C", "7"),
-  //   new Card("D", "7"),
-  // ];
-  // sortedCards = testHand;
+  const testHand = [
+    new Card("H", "2"),
+    new Card("H", "6"),
+    new Card("H", "7"),
+    new Card("H", "8"),
+    new Card("H", "9"),
+    new Card("H", "T"),
+    new Card("H", "A"),
+  ];
+  sortedCards = testHand;
 
   //grab the highest value represented
   maxCardValue = sortedCards[sortedCards.length - 1].numericValue;
@@ -241,7 +241,7 @@ function checkRoyalFlush(stats) {
 }
 
 //make this similar to the straight flush helper
-function royalFlushHelper(suitedCards) {
+export function royalFlushHelper(suitedCards) {
   if (suitedCards.length < 5) return false;
   if (
     suitedCards[suitedCards.length - 1].numericValue == 14 &&
@@ -254,15 +254,17 @@ function royalFlushHelper(suitedCards) {
   }
 }
 
-function checkStraightFlush(stats) {
+export function checkStraightFlush(stats) {
   const suits = [
     stats.sortedSpades,
     stats.sortedClubs,
     stats.sortedDiamonds,
     stats.sortedHearts,
   ];
+  console.log("inside checkStraightFlush");
 
   for (const suit of suits) {
+    if (suit.length < 5) continue;
     let results = straightFlushHelper(suit);
     if (results != null) {
       return {
@@ -275,11 +277,10 @@ function checkStraightFlush(stats) {
   return null;
 }
 
-function straightFlushHelper(suitedCards) {
+export function straightFlushHelper(suitedCards) {
   let counter = 1;
   let counterMax = 1;
   let highestValue = -1;
-  let hand = [];
 
   if (suitedCards < 5) {
     return null;
@@ -296,8 +297,8 @@ function straightFlushHelper(suitedCards) {
       counter = 1;
     }
   }
-  if (counter > 4) {
-    hand = suitedCards.filter((card) => {
+  if (counterMax > 4) {
+    let hand = suitedCards.filter((card) => {
       if (card.numericValue === highestValue) return true;
       if (card.numericValue === highestValue - 1) return true;
       if (card.numericValue === highestValue - 2) return true;
@@ -314,7 +315,9 @@ function straightFlushHelper(suitedCards) {
     highestValue === 5 &&
     suitedCards[suitedCards.length - 1].numericValue === 14
   ) {
-    hand = suitedCards.slice(0, 4).concat(suitedCards[suitedCards.length - 1]);
+    let hand = suitedCards
+      .slice(0, 4)
+      .concat(suitedCards[suitedCards.length - 1]);
     return { highestValue, hand };
   }
   return null;
@@ -393,7 +396,7 @@ function checkFlush(stats) {
     if (suit.length > 4) {
       let handName = "Flush";
       let score = 500 + evaluateRankByHighestCards(suit);
-      let hand = stats.sortedSpades.slice(-5);
+      let hand = suit.slice(-5);
       return { handName, score, hand };
     }
   }

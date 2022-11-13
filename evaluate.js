@@ -135,16 +135,16 @@ export function analyzeHand(playerCards, tableCards) {
   });
 
   //for testing specific hands only
-  const testHand = [
-    new Card("H", "2"),
-    new Card("H", "6"),
-    new Card("H", "7"),
-    new Card("H", "8"),
-    new Card("H", "9"),
-    new Card("H", "T"),
-    new Card("H", "A"),
-  ];
-  sortedCards = testHand;
+  // const testHand = [
+  //   new Card("H", "2"),
+  //   new Card("H", "6"),
+  //   new Card("H", "7"),
+  //   new Card("H", "8"),
+  //   new Card("H", "9"),
+  //   new Card("H", "T"),
+  //   new Card("H", "A"),
+  // ];
+  // sortedCards = testHand;
 
   //grab the highest value represented
   maxCardValue = sortedCards[sortedCards.length - 1].numericValue;
@@ -220,7 +220,7 @@ export function analyzeHand(playerCards, tableCards) {
   );
 }
 
-function checkRoyalFlush(stats) {
+export function checkRoyalFlush(stats) {
   const suits = [
     stats.sortedSpades,
     stats.sortedClubs,
@@ -323,7 +323,7 @@ export function straightFlushHelper(suitedCards) {
   return null;
 }
 
-function checkFourOfAKind(stats) {
+export function checkFourOfAKind(stats) {
   if (stats.duplicates.length > 0 && stats.duplicates[0].duplicateCount === 4) {
     let handName = "Four of a Kind";
     let score =
@@ -352,7 +352,7 @@ function checkFourOfAKind(stats) {
   return null;
 }
 
-function checkFullHouse(stats) {
+export function checkFullHouse(stats) {
   if (
     stats.duplicates.length > 1 &&
     stats.duplicates[0].duplicateCount === 3 &&
@@ -384,7 +384,7 @@ function checkFullHouse(stats) {
   return null;
 }
 
-function checkFlush(stats) {
+export function checkFlush(stats) {
   const suits = [
     stats.sortedSpades,
     stats.sortedClubs,
@@ -403,7 +403,7 @@ function checkFlush(stats) {
   return null;
 }
 
-function checkStraight(stats) {
+export function checkStraight(stats) {
   if (stats.seqCountMax >= 5) {
     let handName = "Straight";
     let score = 400 + (stats.seqMaxValue / 14) * 99;
@@ -436,7 +436,7 @@ function checkStraight(stats) {
   return null;
 }
 
-function checkThreeOfAKind(stats) {
+export function checkThreeOfAKind(stats) {
   if (
     stats.duplicates.length === 1 &&
     stats.duplicates[0].duplicateCount === 3
@@ -471,7 +471,7 @@ function checkThreeOfAKind(stats) {
   return null;
 }
 
-function checkTwoPair(stats) {
+export function checkTwoPair(stats) {
   if (stats.duplicates.length > 1) {
     let handName = "Two Pair";
     let score =
@@ -512,7 +512,7 @@ function checkTwoPair(stats) {
   }
 }
 
-function checkPair(stats) {
+export function checkPair(stats) {
   if (stats.duplicates.length > 0) {
     let handName = "Pair";
     let score =

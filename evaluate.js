@@ -261,7 +261,6 @@ export function checkStraightFlush(stats) {
     stats.sortedDiamonds,
     stats.sortedHearts,
   ];
-  console.log("inside checkStraightFlush");
 
   for (const suit of suits) {
     if (suit.length < 5) continue;

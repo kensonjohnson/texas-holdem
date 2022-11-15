@@ -1,0 +1,24 @@
+{
+  "name": "texas-holdem",
+  "version": "1.0.0",
+  "description": "Texas Holdem' Poker game writen in vanilla JavaScript.",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest",
+    "watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kensonjohnson/texas-holdem.git"
+  },
+  "author": "Kenson Johnson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kensonjohnson/texas-holdem/issues"
+  },
+  "homepage": "https://github.com/kensonjohnson/texas-holdem#readme",
+  "devDependencies": {
+    "@babel/preset-env": "^7.20.2",
+    "jest": "^29.3.1"
+  }
+}

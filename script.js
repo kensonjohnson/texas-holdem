@@ -94,7 +94,7 @@ function determineIfWinner(results, winnings) {
   if (results.score > 99) {
     return `You win with a ${results.handName}! You won $${winnings}!`;
   }
-  return `You lost. Please try again!`;
+  return `You lost. These are your five best cards, but they don't make anything! Please try again!`;
 }
 
 function determineWinnings(score, wager) {

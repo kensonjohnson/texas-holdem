@@ -1,71 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Poker - Texas Hold 'em</title>
-    <link rel="stylesheet" href="styles.css">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Noto-Sans"
+    />
+    <style>
+      body {
+        font-family: "Noto Sans", sans-serif;
+      }
+    </style>
+    <link rel="stylesheet" href="styles.css" />
     <script src="script.js" type="module"></script>
-</head>
+  </head>
 
-<body>
+  <body>
+    <button class="help-button" data-help-button>
+      <img class="help-icon" src="./images/help-circle.svg" alt="" />
+    </button>
+    <div id="help-modal" class="modal">
+      <div class="modal-content animate">
+        <span class="close" data-help-close> &times; </span>
+        <h3 class="modal-heading">Help</h3>
+        <div class="help-container">
+          <div class="instructions">
+            <p>
+              This take on the classic Texas Holdem style poker plays more like
+              a casino slot machine. You'll play against the odds of getting the
+              best hands. Gameplay is simple and goes like this:
+            </p>
+            <p>
+              All poker is the best of 5 cards. Regardless of how many cards are
+              in play, you can only pick 5 cards for your hand. In Texas Holdem,
+              there are 5 cards on the table and two in your hand. Everyone can
+              use the cards on the table, but only you can use the cards in your
+              hand.
+            </p>
+            <ol>
+              <li>
+                When you press play, $5 will be deducted from your wallet and
+                the game will start. Once the game starts, you get your two-card
+                hand. At this point, you will be able to increase your wager in
+                $5 increments as much as you want. Press Play to move to the
+                next step.
+              </li>
+              <li>
+                The next step turns the first three cards on the table face up.
+                The turning of these cards is also called the "flop". If you
+                like what you see, you can continue to increase your wager.
+                Press play to move to the next step.
+              </li>
+              <li>
+                The next step turns the fourth card on the table face up. This
+                is also called the "turn" card or "fourth street." If you like
+                what you see, you can continue to increase your wager. Press
+                play to move to the next step.
+              </li>
+              <li>
+                The next step turns the fifth card on the table face up. This is
+                also called the "river" card or "fifth street." At this point,
+                the game will determine your best 5 cards for you, and highlight
+                the results. You'll get a payout (or not) based on the hand you
+                got. Press play to setup a new game and keep stacking chips!
+              </li>
+            </ol>
+            <img
+              src="images/poker-hands.jpg"
+              alt="List of poker hands"
+              class="poker-hands-image"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="game">
+      <div class="top-text" data-instructions-text>
+        Hit "Play" to begin playing. Each game costs $5 in chips to start!
+      </div>
+      <div>
         <div class="table">
-            <div class="card" data-table-card>
-                <div class="card-back card-face"><img src="images/B.svg" alt="Card"></div>
-                <div class="card-front card-face" data-table-card-front><img src="images/B.svg" alt="Card"
-                        data-table-card-value>
-                </div>
+          <div class="card" data-table-card>
+            <div class="card-back card-face">
+              <img src="images/B.svg" alt="Card" />
             </div>
-            <div class="card" data-table-card>
-                <div class="card-back card-face"><img src="images/B.svg" alt="Card"></div>
-                <div class="card-front card-face" data-table-card-front><img src="images/B.svg" alt="Card"
-                        data-table-card-value></div>
+            <div class="card-front card-face" data-table-card-front>
+              <img src="images/B.svg" alt="Card" data-table-card-value />
             </div>
-            <div class="card" data-table-card>
-                <div class="card-back card-face"><img src="images/B.svg" alt="Card"></div>
-                <div class="card-front card-face" data-table-card-front><img src="images/B.svg" alt="Card"
-                        data-table-card-value></div>
+          </div>
+          <div class="card" data-table-card>
+            <div class="card-back card-face">
+              <img src="images/B.svg" alt="Card" />
             </div>
-            <div class="card" data-table-card>
-                <div class="card-back card-face"><img src="images/B.svg" alt="Card"></div>
-                <div class="card-front card-face" data-table-card-front><img src="images/B.svg" alt="Card"
-                        data-table-card-value></div>
+            <div class="card-front card-face" data-table-card-front>
+              <img src="images/B.svg" alt="Card" data-table-card-value />
             </div>
-            <div class="card" data-table-card>
-                <div class="card-back card-face"><img src="images/B.svg" alt="Card"></div>
-                <div class="card-front card-face" data-table-card-front><img src="images/B.svg" alt="Card"
-                        data-table-card-value></div>
+          </div>
+          <div class="card" data-table-card>
+            <div class="card-back card-face">
+              <img src="images/B.svg" alt="Card" />
             </div>
-
+            <div class="card-front card-face" data-table-card-front>
+              <img src="images/B.svg" alt="Card" data-table-card-value />
+            </div>
+          </div>
+          <div class="card" data-table-card>
+            <div class="card-back card-face">
+              <img src="images/B.svg" alt="Card" />
+            </div>
+            <div class="card-front card-face" data-table-card-front>
+              <img src="images/B.svg" alt="Card" data-table-card-value />
+            </div>
+          </div>
+          <div class="card" data-table-card>
+            <div class="card-back card-face">
+              <img src="images/B.svg" alt="Card" />
+            </div>
+            <div class="card-front card-face" data-table-card-front>
+              <img src="images/B.svg" alt="Card" data-table-card-value />
+            </div>
+          </div>
         </div>
         <div class="player">
-            <div class="hand">
-                <div class="card" data-player-card>
-                    <div class="card-back card-face"><img src="images/B.svg" alt="Card"></div>
-                    <div class="card-front card-face" data-player-card-front><img src="images/B.svg" alt="Card"
-                            data-player-card-value></div>
-                </div>
-                <div class="card" data-player-card>
-                    <div class="card-back card-face"><img src="images/B.svg" alt="Card"></div>
-                    <div class="card-front card-face" data-player-card-front><img src="images/B.svg" alt="Card"
-                            data-player-card-value></div>
-                </div>
+          <div class="hand">
+            <div class="card" data-player-card>
+              <div class="card-back card-face">
+                <img src="images/B.svg" alt="Card" />
+              </div>
+              <div class="card-front card-face" data-player-card-front>
+                <img src="images/B.svg" alt="Card" data-player-card-value />
+              </div>
             </div>
-            <div class="stats">
-                <div class="span-two stats-text-item" data-instructions-text>Hit "Next" to begin playing. Each game
-                    costs $5 in chips to start!</div>
-                <div class="stats-text-item">Wallet:</div>
-                <div class="stats-text-item" data-current-chips>$150</div>
-                <div class="stats-text-item">Current Bet:</div>
-                <div class="stats-text-item" data-current-bet>$0</div>
-                <button data-wager-button disabled class="button">Place Bet</button>
-                <button data-next-button class="button">Play</button>
+            <div class="card" data-player-card>
+              <div class="card-back card-face">
+                <img src="images/B.svg" alt="Card" />
+              </div>
+              <div class="card-front card-face" data-player-card-front>
+                <img src="images/B.svg" alt="Card" data-player-card-value />
+              </div>
             </div>
+          </div>
+          <div class="stats">
+            <div class="counter">
+              <div class="stats-text-title">Wager</div>
+              <div class="stats-text-value" data-current-bet>$0</div>
+            </div>
+            <div class="counter">
+              <div class="stats-text-title">Wallet</div>
+              <div class="stats-text-value" data-current-chips>$150</div>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="buttons-row">
+        <div><button data-next-button class="button">Play</button></div>
+        <div>
+          <button data-wager-button disabled class="button">Place Bet</button>
+        </div>
+      </div>
     </div>
-</body>
-
+  </body>
 </html>

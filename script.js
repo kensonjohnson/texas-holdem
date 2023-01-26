@@ -10,6 +10,9 @@ const nextButton = document.querySelector("[data-next-button]");
 const instructionText = document.querySelector("[data-instructions-text]");
 const currentChipsDisplay = document.querySelector("[data-current-chips]");
 const currentBetDisplay = document.querySelector("[data-current-bet]");
+const helpButton = document.querySelector("[data-help-button]");
+const helpModal = document.getElementById("help-modal");
+const modalCloseButton = document.querySelector("[data-help-close]");
 
 //create deck of 52 cards
 let deck = new Deck();
@@ -35,7 +38,7 @@ function next() {
       console.log(checkPlayerHand(player.cards, table.cards));
       // console.log(table.cards);
       gameStep++;
-      instructionText.innerHTML = "You can place a bet, or hit next!";
+      instructionText.innerHTML = "You can place a bet, or hit play!";
       wagerButton.addEventListener("click", wager);
       wagerButton.disabled = false;
       break;
@@ -70,7 +73,7 @@ function next() {
       currentWager = 0;
       updateStatsDisplay();
       instructionText.innerHTML =
-        'Hit "Next" to begin playing. Each game costs $5 in chips to start!';
+        'Hit "Play" to begin playing. Each game costs $5 in chips to start!';
       break;
 
     default: //if something doesn't match up, just reset the game
@@ -79,7 +82,7 @@ function next() {
       gameStep = 0;
       currentWager = 0;
       instructionText.innerHTML =
-        'Hit "Next" to begin playing. Each game costs $5 in chips to start!';
+        'Hit "Play" to begin playing. Each game costs $5 in chips to start!';
       wagerButton.removeEventListener("click", wager);
       wagerButton.disabled = true;
   }
@@ -94,7 +97,7 @@ function determineIfWinner(results, winnings) {
   if (results.score > 99) {
     return `You win with a ${results.handName}! You won $${winnings}!`;
   }
-  return `You lost. Please try again!`;
+  return `You lost. These are your five best cards, but they don't make anything! Please try again!`;
 }
 
 function determineWinnings(score, wager) {
@@ -153,4 +156,12 @@ const wager = () => {
 
 nextButton.addEventListener("click", () => {
   next();
+});
+
+helpButton.addEventListener("click", () => {
+  helpModal.classList.add("show");
+});
+
+modalCloseButton.addEventListener("click", () => {
+  helpModal.classList.remove("show");
 });

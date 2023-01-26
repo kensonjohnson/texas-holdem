@@ -4,9 +4,41 @@
   box-sizing: border-box;
 }
 
+:root {
+  --table-clr: #006400;
+  --border-clr: #bc6c25;
+  --background-clr: #242423;
+  --background-clr-alt: #333533;
+  --scorecard-clr: #cfdbd5;
+  --button-bg-clr: #0a6bff;
+}
+
 body {
   margin: 0;
   padding: 0;
+  background: linear-gradient(
+    -45deg,
+    var(--background-clr) 53%,
+    var(--background-clr-alt) 53%
+  );
+  position: relative;
+}
+
+.help-button {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  right: 20px;
+  background: var(--background-clr);
+  border: none;
+}
+
+.help-icon {
+  height: 35px;
+  width: 35px;
 }
 
 .game {
@@ -15,8 +47,18 @@ body {
   max-width: fit-content;
   min-width: fit-content;
   justify-content: space-around;
-  margin: 2rem;
+  gap: 2rem;
+  margin: 2rem auto;
   perspective: 1000px;
+}
+
+.top-text {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  position: relative;
+  font-size: 1.2rem;
+  color: #fff;
 }
 
 img {
@@ -57,12 +99,13 @@ img {
 
 .table,
 .hand {
-  border: 1px solid black;
+  border: 0.5rem solid var(--border-clr);
   max-width: fit-content;
   min-width: fit-content;
-  gap: 1rem;
-  padding: 1rem;
+  gap: 2rem;
+  padding: 2rem;
   display: flex;
+  background-color: var(--table-clr);
 }
 
 .table {
@@ -78,6 +121,7 @@ img {
 
 .hand {
   border-right: none;
+  border-top: none;
   border-radius: 0 0 0 1rem;
 }
 
@@ -87,25 +131,68 @@ img {
 }
 
 .stats {
-  border: 1px solid black;
+  background-color: var(--table-clr);
+  border: 0.5rem solid var(--border-clr);
   flex: auto;
+  border-top: none;
+  border-left: none;
   border-radius: 0 0 1rem 0;
   padding: 1rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
-.stats-text-item {
+.buttons-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.counter {
+  padding: 0;
+  background: linear-gradient(
+    -45deg,
+    var(--scorecard-clr) 50%,
+    var(--button-bg-clr) 50%
+  );
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
   border: 1px solid black;
-  padding: 5px;
+  width: 10rem;
+  height: 10rem;
+  border-radius: 1rem;
 }
 
-.span-two {
-  grid-column-start: span 2;
+.stats-text-title {
+  display: flex;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--background-clr-alt);
+  padding-left: 1rem;
+  position: relative;
+  font-size: 1.2rem;
+  width: 100%;
+}
+
+.stats-text-value {
+  display: flex;
+  font-size: 1.5rem;
+  font-weight: 600;
+
+  justify-content: end;
+  padding-right: 1rem;
+  position: relative;
+  font-size: 1.2rem;
+  width: 100%;
 }
 
 .button {
-  background-color: #0a6bff;
+  background-color: var(--button-bg-clr);
   border-radius: 4px;
   border: 0;
   box-shadow: rgba(1, 60, 136, 0.5) 0 -1px 3px 0 inset,
@@ -123,11 +210,13 @@ img {
   padding: 16px 20px;
   position: relative;
   text-align: center;
+  vertical-align: middle;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  vertical-align: baseline;
+  /* vertical-align: baseline; */
   transition: all 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+  width: 15rem;
 }
 
 .button:hover:enabled {
@@ -147,4 +236,110 @@ img {
   transition: scale 300ms ease-in-out;
   box-shadow: 1px 1px 4px 2px gold;
   scale: 1.07;
+}
+
+/* MODAL STYLING */
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.3); /* Black w/ opacity */
+}
+
+.show {
+  display: flex;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  background-color: var(--scorecard-clr);
+  border: 7px solid var(--background-clr);
+  width: fit-content;
+  height: fit-content;
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.75) 0px 22px 70px 4px;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.instructions {
+  width: 50rem;
+}
+
+ol {
+  padding-left: 1rem;
+}
+
+li {
+  margin-bottom: 1rem;
+}
+
+.poker-hands-image {
+  width: 50rem;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+/* The Close Button */
+.close {
+  /* Position it in the top right corner outside of the modal */
+  position: absolute;
+  right: 1rem;
+  top: 0.5rem;
+  color: var(--background-clr);
+  font-size: 35px;
+  font-weight: bold;
+}
+
+/* Close button on hover */
+.close:hover,
+.close:focus {
+  color: red;
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.modal-heading {
+  margin: 0.3rem;
+  padding: 0;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s;
+}
+
+@-webkit-keyframes animatezoom {
+  from {
+    -webkit-transform: scale(0);
+  }
+  to {
+    -webkit-transform: scale(1);
+  }
+}
+
+@keyframes animatezoom {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
 }

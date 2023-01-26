@@ -21,6 +21,24 @@ body {
     var(--background-clr) 53%,
     var(--background-clr-alt) 53%
   );
+  position: relative;
+}
+
+.help-button {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  right: 20px;
+  background: var(--background-clr);
+  border: none;
+}
+
+.help-icon {
+  height: 35px;
+  width: 35px;
 }
 
 .game {
@@ -224,7 +242,7 @@ img {
 
 /* The Modal (background) */
 .modal {
-  display: flex; /* Hidden by default */
+  display: none; /* Hidden by default */
   align-items: center;
   justify-content: center;
   position: fixed; /* Stay in place */
@@ -238,6 +256,10 @@ img {
   background-color: rgba(0, 0, 0, 0.3); /* Black w/ opacity */
 }
 
+.show {
+  display: flex;
+}
+
 /* Modal Content/Box */
 .modal-content {
   display: flex;
@@ -246,18 +268,40 @@ img {
   align-items: center;
   background-color: var(--scorecard-clr);
   border: 7px solid var(--background-clr);
-  width: 40rem; /* Could be more or less, depending on screen size */
-  height: 60rem;
+  width: fit-content;
+  height: fit-content;
   border-radius: 0.5rem;
   box-shadow: rgba(0, 0, 0, 0.75) 0px 22px 70px 4px;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.instructions {
+  width: 50rem;
+}
+
+ol {
+  padding-left: 1rem;
+}
+
+li {
+  margin-bottom: 1rem;
+}
+
+.poker-hands-image {
+  width: 50rem;
+  height: auto;
+  margin: 0;
+  padding: 0;
 }
 
 /* The Close Button */
 .close {
   /* Position it in the top right corner outside of the modal */
   position: absolute;
-  right: 0.5cm;
-  top: 0.5cm;
+  right: 1rem;
+  top: 0.5rem;
   color: var(--background-clr);
   font-size: 35px;
   font-weight: bold;
@@ -272,8 +316,8 @@ img {
 }
 
 .modal-heading {
-  color: black;
-  margin-top: 1cm;
+  margin: 0.3rem;
+  padding: 0;
 }
 
 /* Add Zoom Animation */

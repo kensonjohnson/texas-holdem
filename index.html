@@ -5,20 +5,81 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Poker - Texas Hold 'em</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Noto-Sans"
+    />
+    <style>
+      body {
+        font-family: "Noto Sans", sans-serif;
+      }
+    </style>
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" type="module"></script>
   </head>
 
   <body>
-    <div id="id01" class="modal">
+    <button class="help-button" data-help-button>
+      <img class="help-icon" src="./images/help-circle.svg" alt="" />
+    </button>
+    <div id="help-modal" class="modal">
       <div class="modal-content animate">
-        <span class="close"> &times; </span>
-        <h2 class="modal-heading">Help</h2>
+        <span class="close" data-help-close> &times; </span>
+        <h3 class="modal-heading">Help</h3>
+        <div class="help-container">
+          <div class="instructions">
+            <p>
+              This take on the classic Texas Holdem style poker plays more like
+              a casino slot machine. You'll play against the odds of getting the
+              best hands. Gameplay is simple and goes like this:
+            </p>
+            <p>
+              All poker is the best of 5 cards. Regardless of how many cards are
+              in play, you can only pick 5 cards for your hand. In Texas Holdem,
+              there are 5 cards on the table and two in your hand. Everyone can
+              use the cards on the table, but only you can use the cards in your
+              hand.
+            </p>
+            <ol>
+              <li>
+                When you press play, $5 will be deducted from your wallet and
+                the game will start. Once the game starts, you get your two-card
+                hand. At this point, you will be able to increase your wager in
+                $5 increments as much as you want. Press Play to move to the
+                next step.
+              </li>
+              <li>
+                The next step turns the first three cards on the table face up.
+                The turning of these cards is also called the "flop". If you
+                like what you see, you can continue to increase your wager.
+                Press play to move to the next step.
+              </li>
+              <li>
+                The next step turns the fourth card on the table face up. This
+                is also called the "turn" card or "fourth street." If you like
+                what you see, you can continue to increase your wager. Press
+                play to move to the next step.
+              </li>
+              <li>
+                The next step turns the fifth card on the table face up. This is
+                also called the "river" card or "fifth street." At this point,
+                the game will determine your best 5 cards for you, and highlight
+                the results. You'll get a payout (or not) based on the hand you
+                got. Press play to setup a new game and keep stacking chips!
+              </li>
+            </ol>
+            <img
+              src="images/poker-hands.jpg"
+              alt="List of poker hands"
+              class="poker-hands-image"
+            />
+          </div>
+        </div>
       </div>
     </div>
     <div class="game">
       <div class="top-text" data-instructions-text>
-        Hit "Next" to begin playing. Each game costs $5 in chips to start!
+        Hit "Play" to begin playing. Each game costs $5 in chips to start!
       </div>
       <div>
         <div class="table">

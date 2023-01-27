@@ -23,11 +23,14 @@ let currentChips = 150;
 let currentWager = 0;
 let table = new Table(deck.dealTable());
 let player = new Player(deck.dealPlayer());
+let canBet = true;
 
 function next() {
   switch (gameStep) {
     case 0: //prepare new game and the player's hand
-      wager();
+      currentChips = currentChips - 5;
+      currentWager = currentWager + 5;
+      updateStatsDisplay();
       deck = new Deck();
       deck.shuffle();
       table = new Table(deck.dealTable());
@@ -41,14 +44,19 @@ function next() {
       instructionText.innerHTML = "You can place a bet, or hit play!";
       wagerButton.addEventListener("click", wager);
       wagerButton.disabled = false;
+      canBet = true;
       break;
 
     case 1: //reveal the flop
+      wagerButton.disabled = false;
+      canBet = true;
       table.displayCards();
       gameStep++;
       break;
 
     case 2: //reveal the turn card
+      wagerButton.disabled = false;
+      canBet = true;
       table.turnCard();
       gameStep++;
       break;
@@ -149,9 +157,13 @@ function displayWinningCards(hand) {
 }
 
 const wager = () => {
-  currentChips = currentChips - 5;
-  currentWager = currentWager + 5;
-  updateStatsDisplay();
+  if (canBet) {
+    currentChips = currentChips - 5;
+    currentWager = currentWager + 5;
+    canBet = false;
+    wagerButton.disabled = true;
+    updateStatsDisplay();
+  }
 };
 
 nextButton.addEventListener("click", () => {

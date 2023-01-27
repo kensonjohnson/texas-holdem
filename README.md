@@ -2,7 +2,7 @@
 
 A Hold 'Em style poker game using vanilla JavaScript.
 This version of the game has been modified for single player.
-Multi-player supprt coming soon!
+Multi-player support coming soon!
 
 <p align="left">
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="45" width="45" />
